@@ -1,4 +1,5 @@
 ﻿using LecturerHelper.Core;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Office.Interop
 using Microsoft.Office.Interop.Access.Dao;
 using Microsoft.Office.Interop.MSProject;
@@ -493,41 +494,36 @@ namespace LecturerHelper.Services
                 Groups = items
             };
         }
-
-
-
-
-
-            void GetReport()
-    {
-        DBEngine dbEngine = new DBEngine();
-        Database? db = null;
-
-        try
+/*
+        void GetReport()
         {
-            // open the Access database
-            db = dbEngine.OpenDatabase(@"C:\path\to\your\database.accdb");
+            Application access = new Application();
+            access.Visible = false;
 
-            // get the report that you want to export
-            Report report = db.Reports["NameOfYourReport"];
-
-            // export the report as an HTML file
-            string outputFile = @"C:\path\to\your\output\file.html";
-            report.PublishToHTML(outputFile);
-
-            // clean up resources
-            report.Close();
-        }
-        finally
-        {
-            // always close the database and dispose of the DBEngine object
-            if (db != null)
+            try
             {
-                db.Close();
-            }
-            dbEngine.Dispose();
-        }
-    }
+                // open the Access database
+                string databasePath = @"C:\path\to\your\database.accdb";
+                Database db = access.OpenDatabase(databasePath, false);
 
-}
+                // get the report that you want to export
+                Report report = db.Containers["Reports"].Documents["NameOfYourReport"] as Report;
+
+                // export the report as an HTML file
+                string outputFile = @"C:\path\to\your\output\file.html";
+                access.DoCmd.OutputTo(AcOutputObjectType.acOutputReport, report.Name, AcFormat.acFormatHTML, outputFile);
+
+                // clean up resources
+                report.Close();
+                db.Close();
+                access.Quit();
+            }
+            finally
+            {
+                // always dispose of the Application object
+                access.Dispose();
+            }
+        }
+*/
+    }
 }
