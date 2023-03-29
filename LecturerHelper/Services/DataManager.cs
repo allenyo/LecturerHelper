@@ -1,4 +1,7 @@
 ﻿using LecturerHelper.Core;
+using Microsoft.Office.Interop
+using Microsoft.Office.Interop.Access.Dao;
+using Microsoft.Office.Interop.MSProject;
 using Models;
 using System.Data.OleDb;
 
@@ -490,28 +493,41 @@ namespace LecturerHelper.Services
                 Groups = items
             };
         }
-        /*
-                void GetReport()
-                {
-
-                    Application access = new Application();
-
-                    // open the Access database
-                    Database db = access.OpenDatabase("path/to/your/database.accdb");
-
-                    // get the report that you want to export
-                    Report report = db.Reports["NameOfYourReport"];
-
-                    // export the report as an HTML file
-                    string outputFile = "path/to/your/output/file.html";
-                    report.PublishToHTML(outputFile);
-
-                    // clean up resources
-                    report.Close();
-                    db.Close();
-                    access.Quit();
 
 
-                }*/
+
+
+
+            void GetReport()
+    {
+        DBEngine dbEngine = new DBEngine();
+        Database? db = null;
+
+        try
+        {
+            // open the Access database
+            db = dbEngine.OpenDatabase(@"C:\path\to\your\database.accdb");
+
+            // get the report that you want to export
+            Report report = db.Reports["NameOfYourReport"];
+
+            // export the report as an HTML file
+            string outputFile = @"C:\path\to\your\output\file.html";
+            report.PublishToHTML(outputFile);
+
+            // clean up resources
+            report.Close();
+        }
+        finally
+        {
+            // always close the database and dispose of the DBEngine object
+            if (db != null)
+            {
+                db.Close();
+            }
+            dbEngine.Dispose();
+        }
     }
+
+}
 }
