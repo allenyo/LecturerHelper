@@ -1,9 +1,6 @@
-﻿using LecturerHelper.Core;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.Office.Interop
-using Microsoft.Office.Interop.Access.Dao;
-using Microsoft.Office.Interop.MSProject;
+﻿using Microsoft.Office.Interop.Access;
 using Models;
+using System.Data;
 using System.Data.OleDb;
 
 
@@ -17,8 +14,8 @@ namespace LecturerHelper.Services
         {
             OleDbConnectionStringBuilder builder = new()
             {
-                Provider = Constants.Provider,
-                DataSource = Constants.DatSource,
+                Provider = Core.Constants.Provider,
+                DataSource = Core.Constants.DatSource,
                 PersistSecurityInfo = true,
             };
 
@@ -494,36 +491,54 @@ namespace LecturerHelper.Services
                 Groups = items
             };
         }
-/*
-        void GetReport()
+
+        public string GetReport(string fakName)
         {
-            Application access = new Application();
-            access.Visible = false;
+            Application app = new Application();
+            Report report = (Report)app.CurrentProject.AllReports["XumbPlan"];
 
-            try
-            {
-                // open the Access database
-                string databasePath = @"C:\path\to\your\database.accdb";
-                Database db = access.OpenDatabase(databasePath, false);
 
-                // get the report that you want to export
-                Report report = db.Containers["Reports"].Documents["NameOfYourReport"] as Report;
+            // Open the Access database file
+            app.OpenCurrentDatabase(Core.Constants.DatSource);
 
-                // export the report as an HTML file
-                string outputFile = @"C:\path\to\your\output\file.html";
-                access.DoCmd.OutputTo(AcOutputObjectType.acOutputReport, report.Name, AcFormat.acFormatHTML, outputFile);
+            // Set the filter criteria for the report
+            string facultyName = "Մեխանիկամեքենաշինական";
 
-                // clean up resources
-                report.Close();
-                db.Close();
-                access.Quit();
-            }
-            finally
-            {
-                // always dispose of the Application object
-                access.Dispose();
-            }
+            ((_Report3)report).Filter = $"[Fakultet] Like '{facultyName}'";
+
+            // Open the report in preview mode
+            app.DoCmd.OpenReport("XumbPlan", AcView.acViewPreview);
+
+            return "ok";
+
+            /* string query = "SELECT * FROM MyTable";
+             OleDbCommand command = new OleDbCommand(query, connection);
+
+             DataTable dataTable = new DataTable();
+             OleDbDataAdapter adapter = new OleDbDataAdapter(command);
+             adapter.Fill(dataTable);
+
+             iTextSharp.text.Document document = new iTextSharp.text.Document();
+             PdfWriter.GetInstance(document, new FileStream("output.pdf", FileMode.Create));
+             document.Open();
+
+             // Create a table and add it to the document
+             PdfPTable table = new PdfPTable(dataTable.Columns.Count);
+             for (int i = 0; i < dataTable.Columns.Count; i++)
+             {
+                 table.AddCell(new Phrase(dataTable.Columns[i].ColumnName));
+             }
+             table.HeaderRows = 1;
+             for (int i = 0; i < dataTable.Rows.Count; i++)
+             {
+                 for (int j = 0; j < dataTable.Columns.Count; j++)
+                 {
+                     table.AddCell(new Phrase(dataTable.Rows[i][j].ToString()));
+                 }
+             }
+             document.Add(table);
+
+             document.Close();*/
         }
-*/
     }
 }

@@ -55,5 +55,12 @@ namespace LecturerHelper.Controllers
         {
             return Ok(_dataManager.Groups());
         }
+
+        [HttpGet]
+        public IActionResult GetReport()
+        {
+            _dataManager.GetReport("a");
+            return Ok();
+        }
     }
 }
