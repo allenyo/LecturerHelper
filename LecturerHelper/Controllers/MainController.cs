@@ -57,10 +57,9 @@ namespace LecturerHelper.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetReport()
+        public IActionResult GetGroupPlan()
         {
-            _dataManager.GetReport("a");
-            return Ok();
+            return Ok(_dataManager.GetAllGroupPlan());
         }
     }
 }

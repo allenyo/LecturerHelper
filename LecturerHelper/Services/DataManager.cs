@@ -1,4 +1,4 @@
-﻿using Microsoft.Office.Interop.Access;
+﻿using AutoMapper;
 using Models;
 using System.Data;
 using System.Data.OleDb;
@@ -9,7 +9,6 @@ namespace LecturerHelper.Services
     public class DataManager : IDataManager
     {
         readonly OleDbConnection connection;
-
         public DataManager()
         {
             OleDbConnectionStringBuilder builder = new()
@@ -20,6 +19,7 @@ namespace LecturerHelper.Services
             };
 
             connection = new(builder.ConnectionString);
+
         }
 
         public FacultyResponseModel Faculties()
@@ -492,53 +492,57 @@ namespace LecturerHelper.Services
             };
         }
 
-        public string GetReport(string fakName)
+/*        public GroupPlanResponseModel GetGroupPlanByFakName(string fakName)
         {
-            Application app = new Application();
-            Report report = (Report)app.CurrentProject.AllReports["XumbPlan"];
+          
+
+        }*/
+        public GroupPlanResponseModel GetAllGroupPlan()
+        {
+
+            var  Config = new MapperConfiguration(cfg => {
+
+               cfg.CreateMap<Groupe, GroupPlan>()
+              .ForMember(p => p.Course, p => p.MapFrom(d => d.Course))
+              .ForMember(p => p.GroupName, p => p.MapFrom(d => d.Group))
+              .ForMember(p => p.StudCount, p => p.MapFrom(d => d.StudCount))
+              .ForMember(p => p.FacultyName, p => p.MapFrom(d => d.Fakulty))
+              .ForMember(p => p.Dasich, p => p.MapFrom(d => d.Dasich))
+              .ForMember(p => p.Profession, p => p.MapFrom(d => d.Masnagit))
+              .ForMember(p => p.Ararka, p => p.MapFrom(d => d.Ararka))
+              .ForMember(p => p.Shab_jam1, p => p.MapFrom(d => (int.Parse(d.Das_1) + d.Lab_1 + d.Gorc_1).ToString()))
+              .ForMember(p => p.Das1, p => p.MapFrom(d => d.Das_1))
+              .ForMember(p => p.Gorc1, p => p.MapFrom(d => d.Gorc1))
+              .ForMember(p => p.Lab1, p => p.MapFrom(d => d.Lab_1))
+              .ForMember(p => p.Cursayin1, p => p.MapFrom(d => d.Kursayin_1))
+              .ForMember(p => p.Qnnutyun1, p => p.MapFrom(d => d.Qnutun_1))
+              .ForMember(p => p.Stugark_1, p => p.MapFrom(d => d.Stugark_1))
+              .ForMember(p => p.Pr1, p => p.MapFrom(d => d.Argin_kis))
+              .ForMember(p => p.Shab_jam2, p => p.MapFrom(d => (int.Parse(d.Das_2) + d.Lab_2 + d.Gorc_2).ToString()))
+              .ForMember(p => p.Das2, p => p.MapFrom(d => d.Das_2))
+              .ForMember(p => p.Gorc2, p => p.MapFrom(d => d.Gorc2))
+              .ForMember(p => p.Lab2, p => p.MapFrom(d => d.Lab_2))
+              .ForMember(p => p.Cursayin2, p => p.MapFrom(d => d.Kursain_2))
+              .ForMember(p => p.Qnnutyun2, p => p.MapFrom(d => d.Qnutun_2))
+              .ForMember(p => p.Stugark_2, p => p.MapFrom(d => d.Stugark_2))
+              .ForMember(p => p.Pr2, p => p.MapFrom(d => d.Erk_kis))
+              .ForMember(p => p.Sharunak, p => p.MapFrom(d => d.Sharunak))
+              .ForMember(p => p.Ambion, p => p.MapFrom(d => d.Ambion));
+
+            });
+
+            var mapper = new Mapper(Config);
+            var data = AllGroups().Groups;
+            var groupPlans = mapper.Map<List<Groupe>, List<GroupPlan>>(data);
+            return new GroupPlanResponseModel { GroupPlans = groupPlans.OrderBy(p => p.Ararka).ToList() };
 
 
-            // Open the Access database file
-            app.OpenCurrentDatabase(Core.Constants.DatSource);
-
-            // Set the filter criteria for the report
-            string facultyName = "Մեխանիկամեքենաշինական";
-
-            ((_Report3)report).Filter = $"[Fakultet] Like '{facultyName}'";
-
-            // Open the report in preview mode
-            app.DoCmd.OpenReport("XumbPlan", AcView.acViewPreview);
-
-            return "ok";
-
-            /* string query = "SELECT * FROM MyTable";
-             OleDbCommand command = new OleDbCommand(query, connection);
-
-             DataTable dataTable = new DataTable();
-             OleDbDataAdapter adapter = new OleDbDataAdapter(command);
-             adapter.Fill(dataTable);
-
-             iTextSharp.text.Document document = new iTextSharp.text.Document();
-             PdfWriter.GetInstance(document, new FileStream("output.pdf", FileMode.Create));
-             document.Open();
-
-             // Create a table and add it to the document
-             PdfPTable table = new PdfPTable(dataTable.Columns.Count);
-             for (int i = 0; i < dataTable.Columns.Count; i++)
-             {
-                 table.AddCell(new Phrase(dataTable.Columns[i].ColumnName));
-             }
-             table.HeaderRows = 1;
-             for (int i = 0; i < dataTable.Rows.Count; i++)
-             {
-                 for (int j = 0; j < dataTable.Columns.Count; j++)
-                 {
-                     table.AddCell(new Phrase(dataTable.Rows[i][j].ToString()));
-                 }
-             }
-             document.Add(table);
-
-             document.Close();*/
         }
+/*
+        public GroupPlanResponseModel GetGroupPlanByGroup(string groupname)
+        {
+
+
+        }*/
     }
 }

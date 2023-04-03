@@ -11,6 +11,9 @@ namespace LecturerHelper.Services
         Patok1ResponseModel Patok1s();
         PatokNaraResponseModel PatokNaras();
         GroupsResponseModel Groups();
-        string GetReport(string fakName);
+/*        GroupPlanResponseModel GetGroupPlanByFakName(string fakName);*/
+        GroupPlanResponseModel GetAllGroupPlan();
+/*        GroupPlanResponseModel GetGroupPlanByGroup(string groupname);*/
+
     }
 }
