@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Models;
+﻿using Models;
 using System.Data;
 using System.Data.OleDb;
 
@@ -492,57 +491,86 @@ namespace LecturerHelper.Services
             };
         }
 
-/*        public GroupPlanResponseModel GetGroupPlanByFakName(string fakName)
+        public GroupPlanResponseModel GetGroupPlanByFakName(string fakName)
         {
-          
+            var data = AllGroups();
+            data.Groups = data.Groups.Where(p => p.Fakulty.Equals(fakName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            return MapToGroupPlanResponseModel(data);
 
-        }*/
+            return null;
+        }
         public GroupPlanResponseModel GetAllGroupPlan()
         {
 
-            var  Config = new MapperConfiguration(cfg => {
+            var data = AllGroups();
 
-               cfg.CreateMap<Groupe, GroupPlan>()
-              .ForMember(p => p.Course, p => p.MapFrom(d => d.Course))
-              .ForMember(p => p.GroupName, p => p.MapFrom(d => d.Group))
-              .ForMember(p => p.StudCount, p => p.MapFrom(d => d.StudCount))
-              .ForMember(p => p.FacultyName, p => p.MapFrom(d => d.Fakulty))
-              .ForMember(p => p.Dasich, p => p.MapFrom(d => d.Dasich))
-              .ForMember(p => p.Profession, p => p.MapFrom(d => d.Masnagit))
-              .ForMember(p => p.Ararka, p => p.MapFrom(d => d.Ararka))
-              .ForMember(p => p.Shab_jam1, p => p.MapFrom(d => (int.Parse(d.Das_1) + d.Lab_1 + d.Gorc_1).ToString()))
-              .ForMember(p => p.Das1, p => p.MapFrom(d => d.Das_1))
-              .ForMember(p => p.Gorc1, p => p.MapFrom(d => d.Gorc1))
-              .ForMember(p => p.Lab1, p => p.MapFrom(d => d.Lab_1))
-              .ForMember(p => p.Cursayin1, p => p.MapFrom(d => d.Kursayin_1))
-              .ForMember(p => p.Qnnutyun1, p => p.MapFrom(d => d.Qnutun_1))
-              .ForMember(p => p.Stugark_1, p => p.MapFrom(d => d.Stugark_1))
-              .ForMember(p => p.Pr1, p => p.MapFrom(d => d.Argin_kis))
-              .ForMember(p => p.Shab_jam2, p => p.MapFrom(d => (int.Parse(d.Das_2) + d.Lab_2 + d.Gorc_2).ToString()))
-              .ForMember(p => p.Das2, p => p.MapFrom(d => d.Das_2))
-              .ForMember(p => p.Gorc2, p => p.MapFrom(d => d.Gorc2))
-              .ForMember(p => p.Lab2, p => p.MapFrom(d => d.Lab_2))
-              .ForMember(p => p.Cursayin2, p => p.MapFrom(d => d.Kursain_2))
-              .ForMember(p => p.Qnnutyun2, p => p.MapFrom(d => d.Qnutun_2))
-              .ForMember(p => p.Stugark_2, p => p.MapFrom(d => d.Stugark_2))
-              .ForMember(p => p.Pr2, p => p.MapFrom(d => d.Erk_kis))
-              .ForMember(p => p.Sharunak, p => p.MapFrom(d => d.Sharunak))
-              .ForMember(p => p.Ambion, p => p.MapFrom(d => d.Ambion));
-
-            });
-
-            var mapper = new Mapper(Config);
-            var data = AllGroups().Groups;
-            var groupPlans = mapper.Map<List<Groupe>, List<GroupPlan>>(data);
-            return new GroupPlanResponseModel { GroupPlans = groupPlans.OrderBy(p => p.Ararka).ToList() };
-
-
+            return MapToGroupPlanResponseModel(data);
         }
-/*
+
         public GroupPlanResponseModel GetGroupPlanByGroup(string groupname)
         {
 
+            var data = AllGroups();
+            data.Groups = data.Groups.Where(p => p.Group.Equals(groupname, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            return MapToGroupPlanResponseModel(data);
+        }
 
-        }*/
+        private static GroupPlanResponseModel MapToGroupPlanResponseModel(GroupsResponseModel groupsResponseModel)
+        {
+            var groupPlanResponseModel = new GroupPlanResponseModel();
+            GroupPlan groupPlan = null;
+            if (groupsResponseModel?.Groups != null)
+            {
+                groupPlanResponseModel.GroupPlans = new List<GroupPlan>();
+
+                foreach (var group in groupsResponseModel.Groups)
+                {
+                    groupPlan = new GroupPlan()
+                    {
+                        FacultyName = group.Fakulty,
+                        Dasich = group.Dasich,
+                        GroupName = group.Group,
+                        StudCount = group.StudCount,
+                        Profession = group.Masnagit,
+                        Course = group.Course,
+                        Ararkaps = new List<Ararkap>()
+                    };
+
+                    var ars = groupsResponseModel.Groups.Where(p => p.Group == group.Group);
+
+                    foreach (var ar in ars)
+                    {
+                        groupPlan.Ararkaps.Add(new Ararkap
+                        {
+                            Ararka = ar.Ararka,
+                            Cursayin1 = ar.Kursayin_1,
+                            Shab_jam1 = (int.Parse(ar.Das_1) + ar.Gorc1 + ar.Lab_1).ToString(),
+                            Das1 = ar.Das_1,
+                            Gorc1 = ar.Gorc_1.ToString(),
+                            Lab1 = ar.Lab_1.ToString(),
+                            Qnnutyun1 = ar.Qnutun_1,
+                            Stugark_1 = ar.Stugark_1,
+                            Pr1 = ar.Argin_kis.ToString(),
+
+                            Shab_jam2 = (int.Parse(ar.Das_2) + ar.Gorc2 + ar.Lab_2).ToString(),
+                            Das2 = ar.Das_2,
+                            Gorc2 = ar.Gorc_2.ToString(),
+                            Lab2 = ar.Lab_2.ToString(),
+                            Cursayin2 = ar.Kursain_2,
+                            Qnnutyun2 = ar.Qnutun_2,
+                            Stugark_2 = ar.Stugark_2,
+                            Pr2 = ar.Erk_kis.ToString(),
+                            Sharunak = ar.Sharunak,
+                            Ambion = ar.Ambion
+                        });
+                    }
+                }
+
+                groupPlanResponseModel.GroupPlans.Add(groupPlan);
+            }
+
+            return groupPlanResponseModel;
+        }
+
     }
 }

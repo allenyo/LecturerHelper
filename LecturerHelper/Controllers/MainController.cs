@@ -61,5 +61,17 @@ namespace LecturerHelper.Controllers
         {
             return Ok(_dataManager.GetAllGroupPlan());
         }
+
+        [HttpGet]
+        public IActionResult GetGroupPlanByFakulty(string fak)
+        {
+            return Ok(_dataManager.GetGroupPlanByFakName(fak));
+        }
+
+        [HttpGet]
+        public IActionResult GetGroupPlanByGroup(string group)
+        {
+            return Ok(_dataManager.GetGroupPlanByGroup(group));
+        }
     }
 }
