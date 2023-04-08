@@ -494,7 +494,7 @@ namespace LecturerHelper.Services
         public GroupPlanResponseModel GetGroupPlanByFakName(string fakName)
         {
             var data = AllGroups();
-            data.Groups = data.Groups.Where(p => p.Fakulty.Equals(fakName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            data.Groups = data.Groups.Where(p => p.Fakulty.Equals(fakName, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p=>p.Fakulty).ToList();
             return MapToGroupPlanResponseModel(data);
 
             return null;
@@ -511,7 +511,7 @@ namespace LecturerHelper.Services
         {
 
             var data = AllGroups();
-            data.Groups = data.Groups.Where(p => p.Group.Equals(groupname, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            data.Groups = data.Groups.Where(p => p.Group.Equals(groupname, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p=>p.Group).ToList();
             return MapToGroupPlanResponseModel(data);
         }
 
@@ -563,10 +563,13 @@ namespace LecturerHelper.Services
                             Sharunak = ar.Sharunak,
                             Ambion = ar.Ambion
                         });
+                  
                     }
+                    groupPlanResponseModel.GroupPlans.Add(groupPlan);
+
                 }
 
-                groupPlanResponseModel.GroupPlans.Add(groupPlan);
+                groupPlanResponseModel.GroupPlans = groupPlanResponseModel.GroupPlans.OrderBy(p => p.FacultyName).ToList();
             }
 
             return groupPlanResponseModel;
