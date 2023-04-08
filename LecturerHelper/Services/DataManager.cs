@@ -518,11 +518,12 @@ namespace LecturerHelper.Services
         private static GroupPlanResponseModel MapToGroupPlanResponseModel(GroupsResponseModel groupsResponseModel)
         {
             var groupPlanResponseModel = new GroupPlanResponseModel();
-            GroupPlan groupPlan = null;
+            GroupPlan? groupPlan = null;
+            Ararkap? ararkap = null;
             if (groupsResponseModel?.Groups != null)
             {
                 groupPlanResponseModel.GroupPlans = new List<GroupPlan>();
-
+                
                 foreach (var group in groupsResponseModel.Groups)
                 {
                     groupPlan = new GroupPlan()
@@ -569,7 +570,7 @@ namespace LecturerHelper.Services
 
                 }
 
-                groupPlanResponseModel.GroupPlans = groupPlanResponseModel.GroupPlans.OrderBy(p => p.FacultyName).ToList();
+                groupPlanResponseModel.GroupPlans = groupPlanResponseModel.GroupPlans.OrderBy(p => p.FacultyName).DistinctBy(g=>g.GroupName).ToList();
             }
 
             return groupPlanResponseModel;
