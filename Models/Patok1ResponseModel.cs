@@ -19,4 +19,5 @@
         public int Course { get; set; }
         public string? QnnutyunStugarq { get; set; }
     }
+
 }

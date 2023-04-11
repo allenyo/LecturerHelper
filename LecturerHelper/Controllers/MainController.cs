@@ -73,5 +73,11 @@ namespace LecturerHelper.Controllers
         {
             return Ok(_dataManager.GetGroupPlanByGroup(group));
         }
+
+        [HttpGet]
+        public IActionResult GetHosq()
+        {
+            return Ok(_dataManager.Hosq());
+        }
     }
 }

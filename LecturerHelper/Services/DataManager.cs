@@ -272,7 +272,7 @@ namespace LecturerHelper.Services
 
             return new Patok1ResponseModel
             {
-                Patok1s = patok1s
+                Patok1s = patok1s.OrderBy(x => x.Hosq).ToList(),
 
             };
         }
@@ -494,7 +494,7 @@ namespace LecturerHelper.Services
         public GroupPlanResponseModel GetGroupPlanByFakName(string fakName)
         {
             var data = AllGroups();
-            data.Groups = data.Groups.Where(p => p.Fakulty.Equals(fakName, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p=>p.Fakulty).ToList();
+            data.Groups = data.Groups.Where(p => p.Fakulty.Equals(fakName, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Fakulty).ToList();
             return MapToGroupPlanResponseModel(data);
 
             return null;
@@ -511,7 +511,7 @@ namespace LecturerHelper.Services
         {
 
             var data = AllGroups();
-            data.Groups = data.Groups.Where(p => p.Group.Equals(groupname, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p=>p.Group).ToList();
+            data.Groups = data.Groups.Where(p => p.Group.Equals(groupname, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Group).ToList();
             return MapToGroupPlanResponseModel(data);
         }
 
@@ -523,7 +523,7 @@ namespace LecturerHelper.Services
             if (groupsResponseModel?.Groups != null)
             {
                 groupPlanResponseModel.GroupPlans = new List<GroupPlan>();
-                
+
                 foreach (var group in groupsResponseModel.Groups)
                 {
                     groupPlan = new GroupPlan()
@@ -564,17 +564,70 @@ namespace LecturerHelper.Services
                             Sharunak = ar.Sharunak,
                             Ambion = ar.Ambion
                         });
-                  
+
                     }
                     groupPlanResponseModel.GroupPlans.Add(groupPlan);
 
                 }
 
-                groupPlanResponseModel.GroupPlans = groupPlanResponseModel.GroupPlans.OrderBy(p => p.FacultyName).DistinctBy(g=>g.GroupName).ToList();
+                groupPlanResponseModel.GroupPlans = groupPlanResponseModel.GroupPlans.OrderBy(p => p.FacultyName).DistinctBy(g => g.GroupName).ToList();
             }
 
             return groupPlanResponseModel;
         }
 
+        public HosqResponse Hosq()
+        {
+            var data = Patok1s().Patok1s;
+            var hosq = new Hosqe();
+            var hosqResponse = new HosqResponse() { Hosqs = new List<Hosqe>() };
+
+            foreach (var item in data)
+            {
+                hosq = new Hosqe
+                {
+                    Hosq = item.Hosq,
+                    AmbionCode = item.AmbionCode,
+                    GroupCount = item.Count,
+                    Course = item.Course,
+                    PUsQan = item.PUsQan,
+                    XUsQan = item.XUsQan,
+                    Semestr = item.Semestr,
+                    Groups = new List<GroupHosq>()
+                };
+
+                var group = data.Where(p => item.Hosq == p.Hosq);
+
+                foreach (var i in group)
+                {
+                    var ararkan = data.Where(p => p.Group == i.Group && p.Hosq == i.Hosq);
+                    var ararkans = new List<Ararkan>();
+
+                    foreach (var ar in ararkan)
+                    {
+                        ararkans.Add(new Ararkan()
+                        {
+                            Ararka = ar.Ararka,
+                            Lek = ar.Lek,
+                            QnnutyunStugarq = ar.QnnutyunStugarq
+                        });
+                    }
+
+
+                    hosq.Groups.Add(new GroupHosq()
+                    {
+                        GroupName = i.Group,
+                        Ararkans = ararkans
+                    });
+
+                }
+
+                hosqResponse.Hosqs.Add(hosq);
+
+                hosqResponse.Hosqs = hosqResponse.Hosqs.DistinctBy(p => p.Hosq).ToList();
+            }
+
+            return hosqResponse;
+        }
     }
 }
