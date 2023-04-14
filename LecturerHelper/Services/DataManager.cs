@@ -629,5 +629,91 @@ namespace LecturerHelper.Services
 
             return hosqResponse;
         }
+
+        public GroupPlanResponseModel GetHosqPlan()
+        {
+            connection.Open();
+            var command = new OleDbCommand
+            {
+                Connection = connection,
+                CommandType = System.Data.CommandType.TableDirect,
+                CommandText = "Xmber"
+            };
+
+            var groupes = new List<Groupe>();
+
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                groupes.Add(new Groupe()
+                {
+                    Ararka = reader.GetValue(0).ToString(),
+                    Sem1 = reader.GetFloat(1),
+                    Sem2 = reader.GetFloat(2),
+                    Gorc1 = reader.GetInt32(3),
+                    Gorc2 = reader.GetInt32(4),
+                    Tarekan = reader.GetValue(5).ToString(),
+                    Argin_kis = reader.GetInt32(6),
+                    Shab_jam_1 = reader.GetFloat(7),
+                    Das_1 = reader.GetValue(8).ToString(),
+                    Gorc_1 = reader.GetFloat(9),
+                    Lab_1 = reader.GetFloat(10),
+                    Kursayin_1 = reader.GetValue(11).ToString(),
+                    Qnutun_1 = reader.GetValue(12).ToString(),
+                    Stugark_1 = reader.GetValue(13).ToString(),
+                    Erk_kis = reader.GetInt32(14),
+                    Shab_jam_2 = reader.GetInt32(15),
+                    Das_2 = reader.GetValue(16).ToString(),
+                    Gorc_2 = reader.GetFloat(17),
+                    Lab_2 = reader.GetFloat(18),
+                    Kursain_2 = reader.GetValue(19).ToString(),
+                    Qnutun_2 = reader.GetValue(20).ToString(),
+                    Stugark_2 = reader.GetValue(21).ToString(),
+                    Sharunak = reader.GetValue(22).ToString(),
+                    Ambion = reader.GetValue(23).ToString(),
+                    Group = reader.GetValue(24).ToString(),
+                    Masnagit = reader.GetValue(25).ToString(),
+                    Dasich = reader.GetValue(26).ToString(),
+                    StudCount = reader.GetInt32(27),
+                    Course = reader.GetInt32(28),
+                    Fakulty = reader.GetValue(29).ToString(),
+                    Graxos = reader.GetValue(30).ToString(),
+                    L1 = reader.GetInt32(31),
+                    L2 = reader.GetInt32(32),
+                    Id = reader.GetInt32(33),
+                    Hosq = reader.GetInt32(34),
+                    D_1 = reader.GetInt32(35),
+                    D_2 = reader.GetInt32(36),
+                    G_1 = reader.GetInt32(37),
+                    G_2 = reader.GetInt32(38),
+                    L_1 = reader.GetInt32(39),
+                    L_2 = reader.GetInt32(40),
+                    DH1 = reader.GetInt32(41),
+                    DH2 = reader.GetInt32(42),
+                    GH1 = reader.GetInt32(43),
+                    GH2 = reader.GetInt32(44),
+                    LH1 = reader.GetInt32(45),
+                    LH2 = reader.GetInt32(46),
+                    DH1q = reader.GetInt32(47),
+                    DH2q = reader.GetInt32(48),
+                    GH1q = reader.GetInt32(49),
+                    GH2q = reader.GetInt32(50),
+                    LH1q = reader.GetInt32(51),
+                    LH2q = reader.GetInt32(52)
+                });
+            }
+
+
+            connection.Close();
+            groupes.RemoveAll(n => !n.Group.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase));
+
+            var gr = new GroupsResponseModel
+            {
+                Groups = groupes
+            };
+
+            return MapToGroupPlanResponseModel(gr);
+        }
     }
 }

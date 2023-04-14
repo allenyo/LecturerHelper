@@ -15,6 +15,6 @@ namespace LecturerHelper.Services
         GroupPlanResponseModel GetAllGroupPlan();
         GroupPlanResponseModel GetGroupPlanByGroup(string groupname);
         HosqResponse Hosq();
-
+        GroupPlanResponseModel GetHosqPlan();
     }
 }

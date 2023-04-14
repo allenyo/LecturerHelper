@@ -79,5 +79,11 @@ namespace LecturerHelper.Controllers
         {
             return Ok(_dataManager.Hosq());
         }
+
+        [HttpGet]
+        public IActionResult GetHosqPlan()
+        {
+            return Ok(_dataManager.GetHosqPlan());
+        }
     }
 }
