@@ -704,7 +704,6 @@ namespace LecturerHelper.Services
                 });
             }
 
-
             connection.Close();
             groupes.RemoveAll(n => !n.Group.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase));
 
