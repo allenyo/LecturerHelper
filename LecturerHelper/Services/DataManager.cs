@@ -714,5 +714,16 @@ namespace LecturerHelper.Services
 
             return MapToGroupPlanResponseModel(gr);
         }
+
+        public LoadResponseModel GetLoadByCode(string code)
+        {
+            var all = Loads().Loads;
+
+            return new LoadResponseModel
+            {
+                Loads = all.Where(p => p.Ambion.Equals(code)).ToList()
+            };
+        }
     }
 }
+

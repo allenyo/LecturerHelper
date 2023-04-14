@@ -16,5 +16,6 @@ namespace LecturerHelper.Services
         GroupPlanResponseModel GetGroupPlanByGroup(string groupname);
         HosqResponse Hosq();
         GroupPlanResponseModel GetHosqPlan();
+        LoadResponseModel GetLoadByCode(string code);
     }
 }

@@ -85,5 +85,11 @@ namespace LecturerHelper.Controllers
         {
             return Ok(_dataManager.GetHosqPlan());
         }
+
+        [HttpGet]
+        public IActionResult GetLoadByCode(string code)
+        {
+            return Ok(_dataManager.GetLoadByCode(code));
+        }
     }
 }
