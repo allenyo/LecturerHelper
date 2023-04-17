@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using LecturerHelper.Data;
+using Models;
 
 namespace LecturerHelper.Services
 {
@@ -7,7 +8,7 @@ namespace LecturerHelper.Services
         FacultyResponseModel Faculties();
         List<AutoHosqNumbers> AutoHosqNumbers();
         LoadResponseModel Loads();
-        List<Kaefic> Kaefics();
+        List<Data.Kaefic> Kaefics();
         Patok1ResponseModel Patok1s();
         PatokNaraResponseModel PatokNaras();
         GroupsResponseModel Groups();
