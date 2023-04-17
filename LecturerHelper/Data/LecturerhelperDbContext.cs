@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace LecturerHelper.Data;
 
@@ -30,7 +28,7 @@ public partial class LecturerhelperDbContext : DbContext
     public virtual DbSet<Xmber> Xmbers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=ALLENYOPC;Database=lecturerhelperDb;Trusted_Connection=True;");
+        => optionsBuilder.UseSqlServer("Server=MSSQLSERVER;Database=lecturerhelperDb;Trusted_Connection=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
