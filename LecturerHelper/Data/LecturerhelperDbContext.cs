@@ -28,7 +28,8 @@ public partial class LecturerhelperDbContext : DbContext
     public virtual DbSet<Xmber> Xmbers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=MSSQLSERVER;Database=lecturerhelperDb;Trusted_Connection=True;");
+        => optionsBuilder.UseSqlServer
+        ("Server=CDB33\\YOSQLSERVER2;Database=lecturerhelperDb;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
