@@ -1,11 +1,7 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using LecturerHelper.Data;
-using LecturerHelper.Mapping;
 using Models;
 using System.Data;
-using System.Data.OleDb;
-
 
 namespace LecturerHelper.Services
 {
@@ -13,12 +9,12 @@ namespace LecturerHelper.Services
     {
         private readonly LecturerhelperDbContext dbContext;
         private readonly Mapping.Mapper mapperconf;
-        private readonly IMapper mapper;    
+        private readonly IMapper mapper;
         public DataManager(LecturerhelperDbContext dbContext, Mapping.Mapper mapperconf)
         {
             this.dbContext = dbContext;
-            this.mapperconf = mapperconf;  
-            mapper = mapperconf.Config.CreateMapper();
+            this.mapperconf = mapperconf;
+            mapper = this.mapperconf.Config.CreateMapper();
         }
 
         public FacultyResponseModel Faculties()
@@ -26,7 +22,7 @@ namespace LecturerHelper.Services
 
             var grups = AllGroups().Groups;
 
-            var fakulties = mapper.Map<List<Fakultet>, List<Faculty>>(  dbContext.Fakultets.ToList());
+            var fakulties = mapper.Map<List<Fakultet>, List<Faculty>>(dbContext.Fakultets.ToList());
 
 
             foreach (var faculty in fakulties)
@@ -42,14 +38,14 @@ namespace LecturerHelper.Services
 
         public List<AutoHosqNumbers> AutoHosqNumbers()
         {
-         
+
             var AutoHosqNumbers = dbContext.AutoHosqNumbers.ToList();
 
-            return mapper.Map<List<Data.AutoHosqNumber>,List<Models.AutoHosqNumbers>>( AutoHosqNumbers);
+            return mapper.Map<List<Data.AutoHosqNumber>, List<Models.AutoHosqNumbers>>(AutoHosqNumbers);
         }
         public LoadResponseModel Loads()
-        {      
-            var Loads =  dbContext.Nagruzkas.ToList();
+        {
+            var Loads = dbContext.Nagruzkas.ToList();
 
             return new LoadResponseModel
             {
@@ -65,7 +61,7 @@ namespace LecturerHelper.Services
 
         public Patok1ResponseModel Patok1s()
         {
-            var patok1s = mapper.Map<List<Data.Patok1>, List<Models.Patok1>>(  dbContext.Patok1s.ToList());       
+            var patok1s = mapper.Map<List<Data.Patok1>, List<Models.Patok1>>(dbContext.Patok1s.ToList());
 
             return new Patok1ResponseModel
             {
@@ -75,9 +71,9 @@ namespace LecturerHelper.Services
         }
         public PatokNaraResponseModel PatokNaras()
         {
-           
 
-            var patokNaras = dbContext.PatokNaras.ToList();        
+
+            var patokNaras = dbContext.PatokNaras.ToList();
 
             return new PatokNaraResponseModel
             {
@@ -88,8 +84,8 @@ namespace LecturerHelper.Services
 
         public GroupsResponseModel AllGroups()
         {
-            var groupes = dbContext.Xmbers.AsEnumerable().Where(n=> !n.Xumb.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase)).ToList();
-    
+            var groupes = dbContext.Xmbers.AsEnumerable().Where(n => !n.Xumb.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase)).ToList();
+
 
             return new GroupsResponseModel
             {
@@ -101,7 +97,7 @@ namespace LecturerHelper.Services
         {
 
             var items = dbContext.Xmbers.AsEnumerable().Where(n => !n.Xumb.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase))
-                .DistinctBy(p=>p.Xumb).ToList();
+                .DistinctBy(p => p.Xumb).ToList();
 
 
             return new GroupsResponseModel
@@ -250,7 +246,7 @@ namespace LecturerHelper.Services
         public GroupPlanResponseModel GetHosqPlan()
         {
 
-            var groupes = dbContext.Xmbers.AsEnumerable().Where(p => p.Xumb.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase)).ToList();           
+            var groupes = dbContext.Xmbers.AsEnumerable().Where(p => p.Xumb.Equals("Հոսքային1", StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             var gr = new GroupsResponseModel
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LecturerHelper.Data;
+﻿namespace LecturerHelper.Data;
 
 public partial class Xmber
 {

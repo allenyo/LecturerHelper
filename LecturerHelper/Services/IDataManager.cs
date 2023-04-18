@@ -1,5 +1,4 @@
-﻿using LecturerHelper.Data;
-using Models;
+﻿using Models;
 
 namespace LecturerHelper.Services
 {
