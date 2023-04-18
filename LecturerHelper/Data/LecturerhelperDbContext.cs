@@ -4,13 +4,23 @@ namespace LecturerHelper.Data;
 
 public partial class LecturerhelperDbContext : DbContext
 {
+    private readonly string? connectionString;
+
     public LecturerhelperDbContext()
     {
+
+
+
     }
 
     public LecturerhelperDbContext(DbContextOptions<LecturerhelperDbContext> options)
         : base(options)
     {
+        var ConfBuilder = new ConfigurationBuilder();
+        ConfBuilder.SetBasePath(Directory.GetCurrentDirectory());
+        ConfBuilder.AddJsonFile("appsettings.json");
+        var config = ConfBuilder.Build();
+        connectionString = config.GetConnectionString("lecturerDbConnection");
     }
 
     public virtual DbSet<AutoHosqNumber> AutoHosqNumbers { get; set; }
@@ -27,8 +37,7 @@ public partial class LecturerhelperDbContext : DbContext
 
     public virtual DbSet<Xmber> Xmbers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=lecturerhelperDb.mssql.somee.com;Database=lecturerhelperDb;User=asasassin_SQLLogin_1;Password=91vsp835zl;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer(connectionString);
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
